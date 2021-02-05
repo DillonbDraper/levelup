@@ -1,0 +1,12 @@
+{
+    "python.pythonPath": "/home/dillon/.local/share/virtualenvs/levelup-B50d0WaI/bin/python",
+    "python.linting.pylintEnabled": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "levelup",
+            "database": "db.sqlite3"
+        }
+    ]
+}
