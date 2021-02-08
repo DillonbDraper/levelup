@@ -7,8 +7,9 @@ from django.db.models.fields.related import ForeignKey
 class Game(models.Model):
 
     title = models.CharField(max_length=100)
-    game_type = ForeignKey(GameType, on_delete=models.CASCADE)
-    number_of_players = models.IntegerField()
+    maker = models.CharField(max_length=100, default="Bill")
     gamer = ForeignKey(Gamer, on_delete=models.CASCADE)
-    description =  models.CharField(max_length=255)
+    gametype = ForeignKey(GameType, on_delete=models.CASCADE)
+    number_of_players = models.IntegerField()
+    skill_level =  models.CharField(max_length=255)
 
