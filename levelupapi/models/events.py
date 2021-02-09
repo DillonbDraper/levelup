@@ -10,3 +10,11 @@ class Event(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     date = DateField(default= '2021-02-04')
     time = TimeField(default= '12:00')
+
+    @property
+    def joined(self):
+        return self.__joined
+
+    @joined.setter
+    def joined(self, value):
+        self.__joined = value

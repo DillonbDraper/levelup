@@ -95,12 +95,24 @@ class Events(ViewSet):
         Returns:
             Response -- JSON serialized list of events
         """
+        # Get the current authenticated user
+        gamer = Gamer.objects.get(user=request.auth.user)
         events = Event.objects.all()
+
+        # Set the `joined` property on every event
+        for event in events:
+            event.joined = None
+
+            try:
+                EventGamers.objects.get(event=event, gamer=gamer)
+                event.joined = True
+            except EventGamers.DoesNotExist:
+                event.joined = False
 
         # Support filtering events by game
         game = self.request.query_params.get('gameId', None)
         if game is not None:
-            events = events.filter(game__id=game)
+            events = events.filter(game__id=type)
 
         serializer = EventSerializer(
             events, many=True, context={'request': request})
@@ -170,7 +182,6 @@ class Events(ViewSet):
         # the method is not supported
         return Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-
 class EventUserSerializer(serializers.ModelSerializer):
     """JSON serializer for event organizer's related Django user"""
     class Meta:
@@ -194,11 +205,4 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ('id', 'game', 'organizer',
-                  'description', 'date', 'time')
-
-
-class GameSerializer(serializers.ModelSerializer):
-    """JSON serializer for games"""
-    class Meta:
-        model = Game
-        fields = ('id', 'title', 'maker', 'number_of_players', 'skill_level')
+                  'description', 'date', 'time', 'joined')
